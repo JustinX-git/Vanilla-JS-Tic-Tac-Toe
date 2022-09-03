@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Tic-tac-toe game</title>
+</head>
+
+<body>
+  <div class="page-container">
+    <div class="app-container">
+      <div class="app-header">
+        <div class="player-choice">
+          <h2>Choose between: <span class="X">X</span> OR <span class="O">O</span></h2>
+        </div>
+        <div id="status">
+        </div>
+      </div>
+      <label>Select Difficulty: </label>
+      <select name="difficulty" id="difficulty" aria-placeholder="Select difficulty">
+        <option value="1">One</option>
+        <option value="2">Two</option>
+        <option value="3">Three</option>
+        <option value="4">Four</option>
+        <option value="5">Five</option>
+        <option value="6">Six</option>
+        <option value="7">Seven</option>
+        <option value="8">Eight</option>
+        <option value="9">Nine</option>
+        <option value="10">Ten(HardCore!!!)</option>
+      </select>
+      <!-- KEY: R = Row, Ra = First row, Rb = Second row, Rc = Third row, C = Collumn(Ca, Cb & Cc mean the same as with the rows.) D = Collumn -->
+      <div class="app-body">
+        <div class="body-container">
+          <div id="Ra1" class="grid-box Ra Ca Da"></div>
+          <div id="Ra2" class="grid-box Ra Cb"></div>
+          <div id="Ra3" class="grid-box Ra Cc Db"></div>
+          <div id="Rb1" class="grid-box Rb Ca"></div>
+          <div id="Rb2" class="grid-box Rb Cb Da Db"></div>
+          <div id="Rb3" class="grid-box Rb Cc"></div>
+          <div id="Rc1" class="grid-box Rc Ca Db"></div>
+          <div id="Rc2" class="grid-box Rc Cb"></div>
+          <div id="Rc3" class="grid-box Rc Cc Da"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="app.js"></script>
+
+</html>

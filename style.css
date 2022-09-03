@@ -1,0 +1,165 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+
+.page-container{
+    height: 100vh;
+     background:repeating-radial-gradient( circle at top center, hsl(214, 47%, 23%), hsl(237, 49%, 15%));
+     color: #fff;
+}
+
+.app-container{
+  width: 60%;
+  margin: auto;
+  padding-top: 3rem;
+}
+
+.app-header{
+border: 1px rgba(255, 255, 255, 0.425) solid;
+display: flex;
+align-items: center;
+padding: 10px;
+position: relative;
+}
+
+.app-header span{
+  display: inline-block;
+  padding: 5px 10px;
+  font-size: 2rem;
+}
+
+.app-header span:hover{
+  background: rgba(51, 51, 51, 0.322);
+  cursor: pointer;
+}
+
+.X{
+  margin-left: 10rem;
+  color: lime;
+}
+
+.O{
+  color: red;
+}
+
+#status{
+  position:absolute;
+  bottom: -160%;
+  left: 39%;
+  font-size: 3rem;
+  text-align: center;
+}
+#reload{
+  width: 60%;
+  margin: 0 auto;
+display: block;
+cursor: pointer;
+}
+
+#difficulty{
+  margin-top: 1rem;
+  width: 15%;
+}
+
+
+.app-body{
+  margin-top: 7rem;
+}
+
+.body-container{
+  width: 60%;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.body-container > div{
+  height: 6rem;
+  font-size: 4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+#Ra1{
+border-width: 0px 2px 2px 0px;
+border-color: #fff;
+border-style: solid;
+}
+
+#Ra2{
+  border-width: 0px 2px 2px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+
+#Ra3{
+  border-width: 0px 0px 2px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+
+#Rb1{
+  border-width: 0px 2px 2px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+#Rb2{
+  border-width: 0px 2px 2px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+#Rb3{
+  border-width: 0px 0px 2px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+#Rc1{
+  border-width: 0px 2px 0px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+#Rc2{
+  border-width: 0px 2px 0px 0px;
+  border-color: #fff;
+  border-style: solid;
+}
+#Rc3{
+  border-width:  0px;
+  border-color: #fff;
+  border-style: solid;
+}
+
+@media(max-width: 600px ){
+  .app-container{
+    width: calc(100vw - 10%);
+    margin: auto;
+    padding-top: 1rem;
+    min-width: 400px;
+  }
+
+  .X{
+    margin-left: .4rem;
+    color: lime;
+  }
+
+  #status{
+    text-align: center;
+    font-size: 1.8rem;
+    transform: translate(-10%,20%);
+  }
+
+  #reload{
+    width: auto;
+    padding: .7rem .7rem;
+  }
+}
+
+
+
+
+
+
