@@ -358,6 +358,7 @@ function getRandomNum(maxNum) {
 //This will handle the difficulty setting of the game
 function setDifficulty(e) {
   difficulty = Number(e.target.value);
+  displayMsg(`${difficulty}`, "limegreen")
   localStorage.setItem("difficulty", difficulty);
 }
 
