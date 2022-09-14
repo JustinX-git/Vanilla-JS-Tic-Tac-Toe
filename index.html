@@ -5,6 +5,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/6fed9e48d6.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="style.css">
   <title>Tic-tac-toe game</title>
 </head>
@@ -12,14 +13,17 @@
 <body>
   <div class="page-container">
     <div class="app-container">
+      <audio src="./bg music/jazz.mp3" autoplay="true" loop="true" id="audio"></audio>
       <div class="app-header">
         <div class="player-choice">
-          <h2>Choose between: <span class="X">X</span> OR <span class="O">O</span></h2>
+          <div><h2>Choose Between:</h2></div>
+          <div><span id="X">X</span> OR <span id="O">O</span></div>
         </div>
-        <div id="status">
-        </div>
+
       </div>
-      <label>Select Difficulty: </label>
+      <div class="game-settings">
+     <div class="difficulty">
+      <label>Difficulty: </label>
       <select name="difficulty" id="difficulty" aria-placeholder="Select difficulty">
         <option value="1">One</option>
         <option value="2">Two</option>
@@ -32,7 +36,11 @@
         <option value="9">Nine</option>
         <option value="10">Ten(HardCore!!!)</option>
       </select>
-      <!-- KEY: R = Row, Ra = First row, Rb = Second row, Rc = Third row, C = Collumn(Ca, Cb & Cc mean the same as with the rows.) D = Collumn -->
+     </div>
+      <div class="sound">Bg-Music:  <i class="fa fa-volume-up" aria-hidden="true"></i></div>
+      </div>
+      <div class="player-notif"></div>
+      <!-- KEY: RiN = Nth box in row i , Ra = First row, Rb = Second row, Rc = Third row, C = Collumn(Ca, Cb & Cc mean the same as with the rows.) D = Diagonal -->
       <div class="app-body">
         <div class="body-container">
           <div id="Ra1" class="grid-box Ra Ca Da"></div>
@@ -47,8 +55,17 @@
         </div>
       </div>
     </div>
+    <div class="pop-menu"> 
+    <div>
+      <button class="btn" id="stats">STATS</button>
+      <button class="btn" id="others">OTHERS</button>
+    </div> 
+    </div>
   </div>
 </body>
 <script src="app.js"></script>
 
 </html>
+
+<!-- <i class="fa fa-volume-up" aria-hidden="true"></i> -->
+<!-- <i class="fa fa-volume-off" aria-hidden="true"></i> -->
