@@ -256,12 +256,12 @@ function initialTurnSelector(userChar, houseChar) {
   }
   if (playerTurn) {
     if(!document.getElementById("difficulty").disabled) document.getElementById("difficulty").disabled = true
-    displayMsg("You're To Play", "limegreen")
+    displayMsg(`You're To Play, difficulty: ${difficulty}`, "limegreen")
     userTurn(userChar, houseChar)
     setTimeout(() => { document.getElementById("status").remove() }, 2000)
   } else {
     if(!document.getElementById("difficulty").disabled) document.getElementById("difficulty").disabled = true
-    displayMsg("House To Play", "red")
+    displayMsg(`House To Play, difficulty: ${difficulty}`, "red")
     setTimeout(() => {
       houseTurn(houseChar)
       userTurn(userChar, houseChar)
