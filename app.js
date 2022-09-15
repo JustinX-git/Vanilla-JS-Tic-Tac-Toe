@@ -1,7 +1,7 @@
 //Global variables
 let houseChar,
   playerTurn,
-  difficulty,
+  difficulty = 5,
   isFirstMove = true,
   reverseCounter = 0,
   stratArr = null,
@@ -13,7 +13,7 @@ const userPickArr = [], housePickArr = [];
 const audio = document.getElementById("audio")
 document.getElementById("X").addEventListener("click", userChar);
 document.getElementById("O").addEventListener("click", userChar);
-document.getElementById("difficulty").addEventListener("click", setDifficulty);
+document.getElementById("difficulty").addEventListener("click", displayDifficultyMenu);
 document.getElementById("stats").addEventListener("click", displayStats);
 document.getElementById("others").addEventListener("click", displayOthers);
 document.querySelector(".fa").addEventListener("click", audioControl)
@@ -21,12 +21,9 @@ document.querySelector(".fa").addEventListener("click", audioControl)
 
 if (localStorage.getItem("stats") === null) localStorage.setItem("stats", JSON.stringify([0, 0, 0]))
 
-if (localStorage.getItem("difficulty") !== null) {
+if (localStorage.getItem("difficulty")) {
   difficulty = JSON.parse(localStorage.getItem("difficulty"))
-} else {
-  localStorage.setItem("difficulty", 5);
-  difficulty = 5
-}
+} 
 document.getElementById("difficulty").value = difficulty;
 
 if (JSON.parse(localStorage.getItem("audioState")) === "muted") {
@@ -40,9 +37,8 @@ if (localStorage.getItem("retainSelectedChar") === null) {
   localStorage.setItem("retainSelectedChar", JSON.stringify(retainSelectedChar))
 } else {
   retainSelectedChar = JSON.parse(localStorage.getItem("retainSelectedChar"))
-  if (retainSelectedChar) {
+  if (retainSelectedChar[0]) {
     document.getElementById(`${retainSelectedChar[0]}`).style.background = "rgba(51, 51, 51, 0.322)";
-    document.getElementById("difficulty").disabled = true
     initialTurnSelector(retainSelectedChar[0], retainSelectedChar[1])
   }
 }
@@ -130,7 +126,6 @@ class HouseLogicUnit {
         }
       }
       if (!checker[1]) {
-        console.log("Went random")
         pickedBox = this.illogicalPick();
       }
     }
@@ -156,18 +151,21 @@ class HouseLogicUnit {
   strategyCheck(gridBoxes) {
     if (stratArr === null) {
       const strategies = [
-        ["Rc1", "Ra2", "Ra1"],
-        ["Ra2", "Rc1", "Ra1"],
-        ["Rc3", "Ra2", "Ra3"],
-        ["Ra2", "Rc3", "Ra3"],
-        ["Rb2", "Ra1", "Rc1"],
         ["Rb2", "Ra3", "Rc3"],
-        ["Rb2", "Rc3", "Rc1"],
-        ["Rb2", "Ra3", "Ra1"],
-        ["Ra1", "Ra2", "Rb2"],
+        ["Rc1", "Ra2", "Ra1"],
+        ["Rc3", "Ra2", "Ra3"],
+        ["Rb2", "Ra1", "Rc1"],
+        ["Ra2", "Rc3", "Ra3"],
+        ["Ra2", "Rc1", "Ra1"],
         ["Ra2", "Rb2", "Ra3"],
+        ["Rc1", "Ra3", "Rc3","Ra1"],
+        ["Rb2", "Ra3", "Ra1"],
+        ["Rb2", "Rc3", "Rc1"],
         ["Rc1", "Rc2", "Rb2"],
-        ["Rc3", "Rb2", "Rc2"]]
+        ["Ra1", "Ra2", "Rb2"],
+        ["Rc3", "Rb2", "Rc2"],
+        ["Ra1", "Rc3", "Rc1","Ra3"]
+      ]
 
       let strategiesObjKeysArr = [];
       for (let k = 0; k < strategies.length; k++) { strategiesObjKeysArr.push(k) }
@@ -230,8 +228,9 @@ function userChar(e) {
       else houseChar = "X";
       e.target.style.background = "rgba(51, 51, 51, 0.322)";
 
-      initialTurnSelector(userChar, houseChar)
-      retainSelectedChar = [userChar, houseChar, true]
+      initialTurnSelector(userChar, houseChar);
+      retainSelectedChar = [userChar, houseChar, true];
+      localStorage.setItem("difficulty", JSON.stringify(difficulty));
       localStorage.setItem("retainSelectedChar", JSON.stringify(retainSelectedChar))
     }
   }
@@ -255,13 +254,11 @@ function initialTurnSelector(userChar, houseChar) {
     localStorage.setItem("playerTurn", playerTurn)
   }
   if (playerTurn) {
-    if(!document.getElementById("difficulty").disabled) document.getElementById("difficulty").disabled = true
-    displayMsg(`You're To Play, difficulty: ${difficulty}`, "limegreen")
+    displayMsg("You're To Play", "limegreen")
     userTurn(userChar, houseChar)
     setTimeout(() => { document.getElementById("status").remove() }, 2000)
   } else {
-    if(!document.getElementById("difficulty").disabled) document.getElementById("difficulty").disabled = true
-    displayMsg(`House To Play, difficulty: ${difficulty}`, "red")
+    displayMsg("House To Play", "red")
     setTimeout(() => {
       houseTurn(houseChar)
       userTurn(userChar, houseChar)
@@ -274,9 +271,6 @@ function initialTurnSelector(userChar, houseChar) {
 function userTurn(userChar, houseChar) {
   function clickEvent(e) {
     if (playerTurn === true && !e.target.classList.contains("picked")) {
-      if (!document.getElementById("difficulty").disabled) {
-        document.getElementById("difficulty").disabled = true
-      }
       if (e.target.classList.contains("grid-box")) {
         e.target.style.color = "rgb(82, 241, 82)"
         e.target.innerText = userChar;
@@ -356,10 +350,96 @@ function getRandomNum(maxNum) {
 }
 
 //This will handle the difficulty setting of the game
-function setDifficulty(e) {
-  difficulty = Number(e.target.value);
-  displayMsg(`${difficulty}`, "limegreen")
-  localStorage.setItem("difficulty", difficulty);
+function displayDifficultyMenu(e) {
+  const backDrop = document.createElement("div"),
+  card = document.createElement("div"),
+  popMenu = document.querySelector(".pop-menu");
+  pageContainer = document.querySelector(".page-container");
+
+backDrop.id = "backdrop";
+card.className = "difficulty-card";
+card.innerHTML =
+  `  
+  <div class="card-title">
+  <div></div>
+ <div id="close-display">X</div>
+ </div>
+ <h2>SELECT DIFFICULTY</h2>
+ <ul>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">1</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">2</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">3</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">4</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">5</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">6</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">7</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">8</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">9</span></h4>
+   </li>
+   <li class="difficulty-option">
+     <div class="difficulty-selector"></div>
+     <h4>Difficulty-<span class="difficulty-level">10</span></h4>
+   </li>
+ </ul>
+ <small> Difficulty settings selected here cannot be changed in-between games. To change the difficulty, click the 'Restore Game Defaults' in the OTHERS pop-menu</small>
+     `
+
+pageContainer.insertBefore(backDrop, popMenu);
+pageContainer.insertBefore(card, backDrop);
+
+setTimeout(() => {
+  let selectedDifficulty = JSON.parse(localStorage.getItem("difficulty")) || difficulty;
+  let check = localStorage.getItem("difficulty");
+  if(check) card.getElementsByTagName("h2")[0].innerText = "CURRENT DIFFICULTY";
+  document.querySelectorAll(".difficulty-option").forEach(option =>{
+    if(parseInt(option.querySelector(".difficulty-level").innerText) === selectedDifficulty) option.classList.add("selected")
+    if(check && !option.classList.contains("selected")) {option.classList.add("unselected")}
+  })
+
+  card.style.transform = "scale(1)";
+   card.addEventListener("click", setDifficulty);
+  document.getElementById("close-display").addEventListener("click", removePopMenu)
+  backDrop.addEventListener("click", removePopMenu)
+}, 300)
+}
+
+function setDifficulty(e){
+  if(!localStorage.getItem("difficulty")){
+  if(e.target.classList.contains("difficulty-selector")){
+    document.querySelectorAll(".difficulty-option").forEach(option =>{
+      if(option.classList.contains("selected")) option.classList.remove("selected")
+    })
+    e.target.parentElement.classList.add("selected");
+    difficulty = parseInt(e.target.nextElementSibling.lastChild.innerText);
+    // e.target.parentElement.parentElement.style.color = "rgb(96, 93, 93)";
+  }
+}
 }
 
 //This will display the msg which tells the user wether they won, lost or tied
@@ -443,7 +523,7 @@ card.innerHTML =
      </div>
       <div class="tutorial">
       <h2>How To Play</h2>
-        <p>The goal of the game is simple, you are to try to fill up any row, collumn or diagonal of the grid with your character(X or O). However while try to do this
+        <p>The goal of the game is simple, you are to try to fill up any row, collumn or diagonal of the grid with your character(X or O). However while trying to do this
         you should keep your eye on your opponent(the AI in this case) as if they fill up any of the aforementioned parts of the grid before you, they win the game, if you do this
         first, you win the game and lastly there is the possibility of a tie or stalemate if neither of you are able to fill up a row, collumn or diagonal with your character before marking off all the
         available boxes in the grid of nine boxes. Keep your eyes peeled for potential strategies and mistakes made by the opponent that you could use to your advantage. Now...go show that AI who's the boss.</p>  
@@ -458,10 +538,8 @@ pageContainer.insertBefore(card, backDrop);
 setTimeout(() => {
   card.style.transform = "scale(1)";
   document.getElementById("game-reset").addEventListener("click", () =>{
-    localStorage.removeItem("playerTurn");
-    localStorage.removeItem("retainSelectedChar");
-    localStorage.removeItem("difficulty");
-    localStorage.removeItem("audioState");
+    localStorage.clear()
+
     window.location.reload()
   })
   document.getElementById("close-display").addEventListener("click", removePopMenu);
@@ -469,9 +547,10 @@ setTimeout(() => {
 }, 300)
 }
 
+
 function removePopMenu(){
   const backDrop = document.getElementById("backdrop"),
-        card = document.querySelector(".card");
+       card = document.querySelector(".card") || document.querySelector(".difficulty-card") ;
   card.style.transform = "scale(0)";
   backDrop.remove();
   setTimeout(() => {
@@ -494,4 +573,3 @@ function audioControl(e) {
     localStorage.setItem("audioState", JSON.stringify("unmuted"))
   }
 }
-
